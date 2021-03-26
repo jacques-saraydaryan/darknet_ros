@@ -10,10 +10,6 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <depend>boost</depend>
-  <depend>libopencv-dev</depend>
-  <depend>libx11</depend>
-  <depend>libxt-dev</depend>
-  <depend>libxext</depend>
 
   <depend>roscpp</depend>
   <depend>rospy</depend>
@@ -24,14 +20,8 @@
   <depend>message_generation</depend>
   <depend>darknet_ros_msgs</depend>
   <depend>actionlib</depend>
-  <depend>nodelet</depend>
 
   <!-- Test dependencies -->
   <test_depend>rostest</test_depend>
   <test_depend>wget</test_depend>
-
-  <!-- Export nodelet plugins -->
-  <export>
-    <nodelet plugin="${prefix}/nodelet_plugins.xml" />
-  </export>  
 </package>
