@@ -208,6 +208,9 @@ class YoloObjectDetector
   char *demoPrefix_;
 
   std_msgs::Header imageHeader_;
+  ros::Time last_image_time_stamp;
+
+
   cv::Mat camImageCopy_;
   boost::shared_mutex mutexImageCallback_;
 

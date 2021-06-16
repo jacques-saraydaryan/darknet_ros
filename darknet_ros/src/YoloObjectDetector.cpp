@@ -662,6 +662,14 @@ bool YoloObjectDetector::isNodeRunning(void)
 
 void *YoloObjectDetector::publishInThread()
 {
+  //check if last image time is the same thatn current one
+  ros::Time current_image_time_stamp = getHeaderBuff(0).stamp;
+  if( last_image_time_stamp == current_image_time_stamp){
+    return 0; 
+  }else{
+    //TODO Need to be protected by mutex ??
+    last_image_time_stamp=current_image_time_stamp;
+  }
   // Publish image.
   //cv::Mat cvImage = cv::cvarrToMat(ipl_);
   cv::Mat cvImage = cv::cvarrToMat(getIpl_());
