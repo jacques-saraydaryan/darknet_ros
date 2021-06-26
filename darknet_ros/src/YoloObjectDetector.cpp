@@ -455,6 +455,7 @@ void *YoloObjectDetector::fetchInThread()
       //setBuffIndex_((getBuffIndex_() + 1) % 3);
 
       setHeaderBuff(0, imageAndHeader.header);
+     
       buffId_[0] = actionId_;
       setBuffIndex_(0);
 
@@ -463,6 +464,7 @@ void *YoloObjectDetector::fetchInThread()
 
         //headerBuff_[getBuffIndex_()] = imageAndHeader.header;
         setHeaderBuff(getBuffIndex_(), imageAndHeader.header);
+         setFrameId_(imageAndHeader.header.frame_id);
         buffId_[getBuffIndex_()] = actionId_;
     }
   }
@@ -569,15 +571,18 @@ void YoloObjectDetector::yolo()
     //headerBuff_[0] = imageAndHeader.header;
     setHeaderBuff(0,imageAndHeader.header);
     // need to keep frame id if multiple images sources on the same topic
-    frameId = imageAndHeader.header.frame_id;
+    //frameId = imageAndHeader.header.frame_id;
+    setFrameId_(imageAndHeader.header.frame_id);
   }
   //buff_[1] = copy_image(buff_[0]);
   setBuff_(1,copy_image(getBuff_(0)));
   setBuff_(2,copy_image(getBuff_(0)));
+  
   //headerBuff_[1] = getHeaderBuff(0);
   setHeaderBuff(1,getHeaderBuff(0));
   //headerBuff_[2] = getHeaderBuff(0);
   setHeaderBuff(2,getHeaderBuff(0));
+  
   //buffLetter_[0] = letterbox_image(getBuff_(0), net_->w, net_->h);
   //buffLetter_[1] = letterbox_image(getBuff_(0)], net_->w, net_->h);
   //buffLetter_[2] = letterbox_image(getBuff_(0), net_->w, net_->h);
@@ -693,7 +698,9 @@ void *YoloObjectDetector::publishInThread()
     darknet_ros_msgs::ObjectCount msg;
     msg.header.stamp = ros::Time::now();
     //msg.header.frame_id = "detection";
-    msg.header.frame_id = frameId;
+    //msg.header.frame_id = frameId;
+    msg.header.frame_id=getFrameId_();
+    
     msg.count = num;
     objectPublisher_.publish(msg);
 
@@ -720,7 +727,8 @@ void *YoloObjectDetector::publishInThread()
     }
     boundingBoxesResults_.header.stamp = ros::Time::now();
     //boundingBoxesResults_.header.frame_id = "detection";
-    boundingBoxesResults_.header.frame_id = frameId ;
+    //boundingBoxesResults_.header.frame_id = frameId ;
+    boundingBoxesResults_.header.frame_id =getFrameId_();
 
     boundingBoxesResults_.image_header = getHeaderBuff((getBuffIndex_() + 1) % 3);
     boundingBoxesPublisher_.publish(boundingBoxesResults_);
@@ -728,7 +736,8 @@ void *YoloObjectDetector::publishInThread()
     darknet_ros_msgs::ObjectCount msg;
     msg.header.stamp = ros::Time::now();
     //msg.header.frame_id = "detection";
-    msg.header.frame_id = frameId;
+    //msg.header.frame_id = frameId;
+    msg.header.frame_id =getFrameId_();
     msg.count = 0;
     objectPublisher_.publish(msg);
 
@@ -819,6 +828,8 @@ void *YoloObjectDetector::publishInThread()
      }
 
   }
+
+
   void YoloObjectDetector::setBuffLetter_(int index, image img){
     {
       boost::unique_lock<boost::shared_mutex> lockBuff(mutexBuffLetter_);
@@ -826,19 +837,19 @@ void *YoloObjectDetector::publishInThread()
      }
   }
 
-  void YoloObjectDetector::replaceImageBuff(int index, image img){
+
+  std::string YoloObjectDetector::getFrameId_(){
       {
-      boost::unique_lock<boost::shared_mutex> lockBuff(mutexBuff_);
-          if (buff_[index].data != NULL){
-
-          ROS_WARN("Before Free, index:%i", index);
-          free(buff_[index].data); 
-          ROS_WARN("After Free index:%i", index);
-          buff_[index]=img;
-         }
-
+      boost::unique_lock<boost::shared_mutex> lockBuff(mutexFrameId_);
+         return frameId;
       }
+  }
 
+    void YoloObjectDetector::setFrameId_(std::string frame_id_arg){
+      {
+      boost::unique_lock<boost::shared_mutex> lockBuff(mutexFrameId_);
+         frameId=frame_id_arg ;
+      }
   }
 
 

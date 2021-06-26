@@ -1,0 +1,67 @@
+yolo_model:
+
+  config_file:
+    name: yolov3-ycb_simu.cfg
+  weight_file:
+    name: yolov3-ycb_simu_best.weights
+  threshold:
+    value: 0.6
+  detection_classes:
+    names:
+      - cracker
+      - sugar
+      - pudding
+      - gelatin
+      - pottedmeat
+      - coffee
+      - tuna
+      - chips
+      - mustard
+      - tomatosoup
+      - banana
+      - strawberry
+      - apple
+      - lemon
+      - peach
+      - pear
+      - orange
+      - plum
+      - windex
+      - bleach
+      - pitcher
+      - plate
+      - bowl
+      - fork
+      - spoon
+      - spatula
+      - wineglass
+      - cup
+      - largemarker
+      - smallmarker
+      - padlocks
+      - bolt
+      - nut
+      - clamp
+      - soccerball
+      - baseball
+      - tennisball
+      - golfball
+      - foambrick
+      - dice
+      - rope
+      - chain
+      - rubikscube
+      - coloredwoodblock
+      - peghole
+      - timer
+      - airplane
+      - tshirt
+      - magazine
+      - creditcard
+      - legoduplo
+      - sponge
+      - coloredwoodblockpot
+      - softball
+      - racquetball
+      - marbles
+      - mug

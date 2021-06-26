@@ -12,6 +12,11 @@
 
   <!-- ROS and network parameter files -->
   <arg name="ros_param_file"             default="$(find darknet_ros)/config/ros.yaml"/>
+
+    <!--
+  <arg name="network_param_file"         default="$(find darknet_ros)/config/yolov3-ycb_simu.yaml"/>
+  -->
+
   <arg name="network_param_file"         default="$(find darknet_ros)/config/yolov2-tiny.yaml"/>
 
   <!-- Load parameters -->

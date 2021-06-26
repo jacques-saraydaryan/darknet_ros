@@ -183,7 +183,9 @@ class YoloObjectDetector
   boost::shared_mutex mutexBuffIndex_;
   IplImage * ipl_;
   boost::shared_mutex mutexIpl_;
+  boost::shared_mutex mutexFrameId_;
   std::string frameId;
+  std::string frameId_ref;
   float fps_ = 0;
   float demoThresh_ = 0;
   float demoHier_ = .5;
@@ -274,6 +276,9 @@ class YoloObjectDetector
 
   image getBuffLetter_(int index);
   void setBuffLetter_(int index, image img);
+
+  std::string getFrameId_();
+  void setFrameId_(std::string frame_id);
 
   void replaceImageBuff(int index, image img);
 };
